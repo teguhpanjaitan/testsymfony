@@ -13,7 +13,7 @@ class PostFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             $post = new Post();
             $post->setSlug("slug-" . $i);
             $post->setTitle("Title " . $i);
@@ -27,7 +27,7 @@ class PostFixtures extends Fixture
 
             $manager->persist($post);
         }
-        
+
         $manager->flush();
     }
 }
