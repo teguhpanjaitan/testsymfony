@@ -53,6 +53,12 @@ class Post
      */
     private $seo_description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\PostCategory", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +144,18 @@ class Post
     public function setSeoDescription(string $seo_description): self
     {
         $this->seo_description = $seo_description;
+
+        return $this;
+    }
+
+    public function getCategory(): ?PostCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?PostCategory $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
