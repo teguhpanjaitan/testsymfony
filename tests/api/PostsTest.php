@@ -5,6 +5,7 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Post;
+use App\Entity\PostCategory;
 // use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 class PostsTest extends ApiTestCase
@@ -27,13 +28,13 @@ class PostsTest extends ApiTestCase
             '@id' => '/api/posts',
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 50,
-            // 'hydra:view' => [
-            //     '@id' => '/api/posts?page=1',
-            //     '@type' => 'hydra:PartialCollectionView',
-            //     'hydra:first' => '/api/posts?page=1',
-            //     'hydra:last' => '/api/posts?page=2',
-            //     'hydra:next' => '/api/posts?page=2',
-            // ],
+            'hydra:view' => [
+                '@id' => '/api/posts?page=1',
+                '@type' => 'hydra:PartialCollectionView',
+                'hydra:first' => '/api/posts?page=1',
+                'hydra:last' => '/api/posts?page=2',
+                'hydra:next' => '/api/posts?page=2',
+            ],
         ]);
 
         // Because test fixtures are automatically loaded between each test, you can assert on them
@@ -46,11 +47,19 @@ class PostsTest extends ApiTestCase
 
     public function testCreateBook(): void
     {
+        
+        static::createClient();
+        $iri = static::findIriBy(PostCategory::class, ['name' => 'Post category name 20']);
+
         $response = static::createClient()->request('POST', '/api/posts', ['json' => [
             'slug' => 'test-1',
             'title' => 'Test 1',
             'content' => 'Brilliantly conceived and executed, this powerful evocation of twenty-first century America gives full rein to Margaret Atwood\'s devastating irony, wit and astute perception.',
-            'status' => true
+            'status' => true,
+            'seoTitle' => 'SEO Title 1',
+            'shortDescription' => 'Short description 1',
+            'seoDescription' => 'SEO Description 11',
+            'category' => $iri
         ]]);
 
         $this->assertResponseStatusCodeSame(201);
@@ -61,7 +70,11 @@ class PostsTest extends ApiTestCase
             'slug' => 'test-1',
             'title' => 'Test 1',
             'content' => 'Brilliantly conceived and executed, this powerful evocation of twenty-first century America gives full rein to Margaret Atwood\'s devastating irony, wit and astute perception.',
-            'status' => true
+            'status' => true,
+            'seoTitle' => 'SEO Title 1',
+            'shortDescription' => 'Short description 1',
+            'seoDescription' => 'SEO Description 11',
+            'category' => $iri
         ]);
         $this->assertRegExp('~^/api/posts/\d+$~', $response->toArray()['@id']);
         $this->assertMatchesResourceItemJsonSchema(Post::class);
