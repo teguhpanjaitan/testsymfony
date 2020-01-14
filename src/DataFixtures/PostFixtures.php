@@ -18,6 +18,9 @@ class PostFixtures extends Fixture
             $post->setSlug("slug-" . $i);
             $post->setTitle("Title " . $i);
             $post->setContent("The content " . $i);
+            $post->setSeoTitle("SEO title " . $i);
+            $post->setSeoDescription("SEO Description " . $i);
+            $post->setShortDescription("Short description " . $i);
 
             if ($i % 2 == 0) {
                 $post->setStatus(false);
